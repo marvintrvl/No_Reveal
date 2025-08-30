@@ -1,0 +1,57 @@
+# Build outputs
+bin/
+obj/
+[Bb]uild/
+[Ll]ogs/
+*.log
+
+# VS / Rider / VS Code
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS Code settings (comment out to include settings in repo)
+.vscode/
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# Test results / coverage
+TestResult*/
+*.coverage
+*.coveragexml
+.coverage/
+
+# Cache
+*.cache
+*.dll.mdb
+
+# OS-generated
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Publish artifacts
+**/publish/
+
+# Debug symbols
+*.pdb
+
+# Resharper / Rider
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Local tooling
+*.userprefs
+
+# JetBrains
+*.idea/
+
+# Temporary
+~$*
+*.tmp

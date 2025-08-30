@@ -1,0 +1,11 @@
+{
+  "IsEnabled": true,
+  "BlockDistance": 1,
+  "RestrictedEdges": [
+    "Bottom"
+  ],
+  "ToggleHotkey": "Ctrl+Shift+F12",
+  "ConfigHotkey": "Ctrl+Shift+F11",
+  "StartMinimized": true,
+  "ShowNotifications": true
+}
