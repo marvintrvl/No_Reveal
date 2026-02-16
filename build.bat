@@ -27,7 +27,7 @@ echo [OK] Cleaned build directories
 REM Restore dependencies
 echo.
 echo Restoring dependencies...
-dotnet restore
+dotnet restore src\NoReveal.csproj
 if errorlevel 1 (
     echo [ERROR] Dependency restoration failed
     pause
@@ -38,7 +38,7 @@ echo [OK] Dependencies restored
 REM Build the application
 echo.
 echo Building Release configuration for win-x64...
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --verbosity minimal
+dotnet publish src\NoReveal.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true --verbosity minimal
 
 if errorlevel 1 (
     echo.
@@ -61,7 +61,7 @@ echo ========================================
 echo           BUILD SUCCESSFUL!
 echo ========================================
 
-set OUTPUT_PATH=bin\Release\net8.0-windows\win-x64\publish\NoReveal.exe
+set OUTPUT_PATH=src\bin\Release\net8.0-windows\win-x64\publish\NoReveal.exe
 if exist "%OUTPUT_PATH%" (
     echo.
     echo Output File: %OUTPUT_PATH%

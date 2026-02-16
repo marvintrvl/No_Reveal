@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -29,6 +30,13 @@ namespace NoReveal
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _proc = HookCallback;
+            UpdateScreenBounds();
+            LogCurrentConfiguration();
+        }
+
+        public void UpdateConfig(Configuration config)
+        {
+            _config = config ?? throw new ArgumentNullException(nameof(config));
             UpdateScreenBounds();
             LogCurrentConfiguration();
         }

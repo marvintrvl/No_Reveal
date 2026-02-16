@@ -27,13 +27,15 @@ try {
 # Clean previous builds if requested
 if ($Clean) {
     Write-Host "Cleaning previous builds..." -ForegroundColor Yellow
-    Remove-Item -Path "bin", "obj" -Recurse -Force -ErrorAction SilentlyContinue
+    # Try to stop the app first
+    Stop-Process -Name "NoReveal" -Force -ErrorAction SilentlyContinue
+    Remove-Item -Path "src\bin", "src\obj", "release\*" -Recurse -Force -ErrorAction SilentlyContinue
     Write-Host "✓ Cleaned build directories" -ForegroundColor Green
 }
 
 # Restore dependencies
 Write-Host "Restoring dependencies..." -ForegroundColor Yellow
-dotnet restore
+dotnet restore src\NoReveal.csproj
 if ($LASTEXITCODE -ne 0) {
     Write-Host "✗ Dependency restoration failed" -ForegroundColor Red
     exit 1
@@ -51,10 +53,12 @@ if ($Test) {
 Write-Host "Building $Configuration configuration for $Runtime..." -ForegroundColor Yellow
 $publishArgs = @(
     "publish"
+    "src\NoReveal.csproj"
     "-c", $Configuration
     "-r", $Runtime
     "--self-contained", "true"
     "-p:PublishSingleFile=true"
+    "-p:IncludeNativeLibrariesForSelfExtract=true"
     "--verbosity", "minimal"
 )
 
@@ -66,16 +70,21 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "           BUILD SUCCESSFUL!            " -ForegroundColor Green
     Write-Host "========================================" -ForegroundColor Green
 
-    $outputPath = "bin\$Configuration\net8.0-windows\$Runtime\publish\NoReveal.exe"
+    $publishDir = "src\bin\$Configuration\net8.0-windows10.0.19041.0\$Runtime\publish\"
+    $outputPath = Join-Path $publishDir "NoReveal.exe"
     $fullPath = Join-Path $PWD $outputPath
 
     if (Test-Path $outputPath) {
-        $fileInfo = Get-Item $outputPath
+        Write-Host "Copying files to release directory..." -ForegroundColor Yellow
+        if (-not (Test-Path "release")) { New-Item -ItemType Directory -Path "release" }
+        Remove-Item -Path "release\*" -Recurse -Force -ErrorAction SilentlyContinue
+        Copy-Item -Path "$publishDir\*" -Destination "release\" -Recurse -Force
+
+        $fileInfo = Get-Item "release\NoReveal.exe"
         $sizeKB = [math]::Round($fileInfo.Length / 1KB, 2)
         $sizeMB = [math]::Round($fileInfo.Length / 1MB, 2)
 
-        Write-Host "Output File: $outputPath" -ForegroundColor Cyan
-        Write-Host "Full Path: $fullPath" -ForegroundColor Cyan
+        Write-Host "Output File: release\NoReveal.exe" -ForegroundColor Cyan
         Write-Host "File Size: $sizeKB KB ($sizeMB MB)" -ForegroundColor Cyan
         Write-Host ""
 

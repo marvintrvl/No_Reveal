@@ -37,7 +37,7 @@ namespace NoReveal
                 _notifyIcon = new NotifyIcon
                 {
                     Icon = CreateIcon(_config.IsEnabled),
-                    Text = $"No_Reveal - {(_config.IsEnabled ? "Enabled" : "Disabled")}",
+                    Text = $"No Reveal - {(_config.IsEnabled ? "Enabled" : "Disabled")}",
                     Visible = true,
                     ContextMenuStrip = _contextMenu
                 };
@@ -59,7 +59,7 @@ namespace NoReveal
                 if (_notifyIcon != null)
                 {
                     _notifyIcon.Icon = CreateIcon(isEnabled);
-                    _notifyIcon.Text = $"No_Reveal - {(isEnabled ? "Enabled" : "Disabled")}";
+                    _notifyIcon.Text = $"No Reveal - {(isEnabled ? "Enabled" : "Disabled")}";
                 }
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace NoReveal
             {
                 if (_config.ShowNotifications && _notifyIcon != null)
                 {
-                    _notifyIcon.ShowBalloonTip(2000, "No_Reveal", message, icon);
+                    _notifyIcon.ShowBalloonTip(2000, "No Reveal", message, icon);
                 }
             }
             catch (Exception ex)

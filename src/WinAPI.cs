@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -83,9 +84,17 @@ namespace NoReveal
         [DllImport("user32.dll")]
         public static extern int GetSystemMetrics(int nIndex);
 
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool ClipCursor(ref RECT lpRect);
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool SetProcessDpiAwarenessContext(IntPtr dpiContext);
+
+        [DllImport("user32.dll")]
+        public static extern uint GetDpiForWindow(IntPtr hWnd);
+
+        public static readonly IntPtr DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = (IntPtr)(-4);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ClipCursor(ref RECT lpRect);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -130,6 +139,36 @@ namespace NoReveal
                 GetSystemMetrics(SM_CXVIRTUALSCREEN),
                 GetSystemMetrics(SM_CYVIRTUALSCREEN)
             );
+        }
+
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+
+        public const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+        public const int DWMWA_SYSTEMBACKDROP_TYPE = 38;
+
+        public enum BackdropType
+        {
+            None = 0,
+            Mica = 2,
+            Acrylic = 3,
+            Tabbed = 4
+        }
+
+        public static bool IsDarkMode()
+        {
+            try
+            {
+                using (var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                {
+                    if (key?.GetValue("AppsUseLightTheme") is int lightTheme)
+                    {
+                        return lightTheme == 0;
+                    }
+                }
+            }
+            catch { }
+            return false;
         }
     }
 }

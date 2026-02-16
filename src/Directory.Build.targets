@@ -1,0 +1,12 @@
+<Project>
+  <!--
+    Point AppxMSBuildToolsPath to our stub DLLs for CLI-only builds.
+    The real DLLs only ship with Visual Studio Build Tools.
+  -->
+  <PropertyGroup>
+    <_StubTaskDir>$(MSBuildThisFileDirectory)..\build\stubs\out\</_StubTaskDir>
+    <AppxMSBuildToolsPath>$(_StubTaskDir)</AppxMSBuildToolsPath>
+    <AppxMSBuildTaskAssembly>$(_StubTaskDir)Microsoft.Build.AppxPackage.dll</AppxMSBuildTaskAssembly>
+    <PriProjTaskAssembly>$(_StubTaskDir)Microsoft.Build.Packaging.Pri.Tasks.dll</PriProjTaskAssembly>
+  </PropertyGroup>
+</Project>

@@ -9,12 +9,13 @@ namespace NoReveal
     public class Configuration
     {
         public bool IsEnabled { get; set; } = true;
-        public int BlockDistance { get; set; } = 1;
+        public int BlockDistance { get; set; } = 2;
         public List<string> RestrictedEdges { get; set; } = new List<string> { "Bottom" };
         public string ToggleHotkey { get; set; } = "Ctrl+Shift+F12";
         public string ConfigHotkey { get; set; } = "Ctrl+Shift+F11";
         public bool StartMinimized { get; set; } = true;
         public bool ShowNotifications { get; set; } = true;
+        public bool StartWithWindows { get; set; } = false;
 
         private static readonly string ConfigPath = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
